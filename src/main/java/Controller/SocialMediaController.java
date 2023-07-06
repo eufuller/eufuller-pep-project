@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-import java.util.List;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -40,7 +39,6 @@ public class SocialMediaController {
 
         // /**Message endpoints */
         app.post("/messages", this::postMessageHandler);
-
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByIDHandler);
         app.delete("/messages/{message_id}", this::deleteMessageHandler);
@@ -62,8 +60,10 @@ public class SocialMediaController {
 // ACCOUNT HANDLERS
     private void postRegistrationHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
+
         Account account = mapper.readValue(ctx.body(), Account.class);
         Account addedAccount = accountService.addAccount(account);
+
         if(addedAccount!=null){
             ctx.json(mapper.writeValueAsString(addedAccount));
         }else{
@@ -71,10 +71,14 @@ public class SocialMediaController {
         }
     }
 
+
+
     private void postLoginHandler(Context ctx) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
+
         Account account = mapper.readValue(ctx.body(), Account.class);
         Account verifyAccount = accountService.verifyAccount(account);
+
         if(verifyAccount!=null){
             ctx.json(mapper.writeValueAsString(verifyAccount));
         }else{
@@ -86,21 +90,12 @@ public class SocialMediaController {
 
 
 
-
-
-
     // MESSAGE HANDLERS
-    //Getting All Messages
-    public void getAllMessagesHandler(Context ctx){
-        ctx.json(messageService.getAllMessages());
-    }
 
-
-    
-
-    // //Create/Post New Messages
+    //Create/Post New Messages
     private void postMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
+
         Message message = mapper.readValue(ctx.body(), Message.class);
         Message addedMessage = null;
 
@@ -114,37 +109,25 @@ public class SocialMediaController {
         }
     }
 
-    // if (accountService.getAccount_id(message.getPosted_by()) != null) {
-    //     addedMessage = messageService.add(message);
-        //ctx.json(addedMessage);
-    // }else if(addedMessage == null) {
-//      ctx.status(400);
-//         } 
+
+
+    //Getting All Messages
+    public void getAllMessagesHandler(Context ctx){
+        ctx.json(messageService.getAllMessages());
+    }
 
 
 
     //Get Message By message_id
     private void getMessageByIDHandler(Context ctx) {
         int messageId = Integer.parseInt(ctx.pathParam("message_id")); 
+
         if(messageService.getMessageById(messageId) == null){
             ctx.status(200);
         }else{
             ctx.json(messageService.getMessageById(messageId));
         }
-
-        
     }
-
-
- //Get Message By Posted_By/Account
-    private void getMessagesByAccountHandler(Context ctx) {
-        int accountId = Integer.parseInt(ctx.pathParam("account_id")); 
-        System.out.println(accountId);
-            ctx.json(messageService.getMessagesByAccount(accountId));
-        }
-
-
-
 
 
 
@@ -171,8 +154,7 @@ public class SocialMediaController {
         Message message = mapper.readValue(ctx.body(), Message.class);
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
         Message updatedMessage = messageService.updateMessage(message_id, message);
-
-        System.out.println(updatedMessage);
+        
         if(updatedMessage == null){
             ctx.status(400);
         }else{
@@ -182,5 +164,13 @@ public class SocialMediaController {
 
 
    
+    //Get Message By Posted_By/Account
+     private void getMessagesByAccountHandler(Context ctx) {
+        int accountId = Integer.parseInt(ctx.pathParam("account_id")); 
+        
+            ctx.json(messageService.getMessagesByAccount(accountId));
+        }
+
+
     // END OF MESSAGE HANDLERS
 }
