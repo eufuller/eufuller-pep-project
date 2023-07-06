@@ -44,4 +44,8 @@ public class AccountService {
         }
         
     }
+
+    public Account getAccountById(int account_id){
+        return accountDAO.getAccountById(account_id);
+    }
 }

@@ -54,13 +54,8 @@ public List<Message> getMessagesByAccount(int posted_by){
 
 // Create New Messages
 public Message addMessage(Message message){
-    Message existingUser = messageDAO.getMessagesByAccount(message.getAccount_id());
-    
-    if(message.getPosted_by()!= (existingUser.getPosted_by())){
-        return null;
-    }else if(!(message.getMessage_text().isBlank()) && !(message.getMessage_text().length() >= 255)){
-        messageDAO.insertMessage(message);
-        return message;
+   if(!(message.getMessage_text().isBlank()) && !(message.getMessage_text().length() >= 255)){
+        return messageDAO.insertMessage(message);
     }
     return null;
 }

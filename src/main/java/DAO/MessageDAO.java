@@ -146,12 +146,13 @@ public class MessageDAO {
 
             preparedStatement.setInt(1, message.getPosted_by());
             preparedStatement.setString(2, message.getMessage_text());
-            preparedStatement.setLong(2, message.getTime_posted_epoch());
+            preparedStatement.setLong(3, message.getTime_posted_epoch());
             
             preparedStatement.executeUpdate();
-            ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
-            if(pkeyResultSet.next()){
-                int generatedMessageId = pkeyResultSet.getInt(1);
+            ResultSet rs = preparedStatement.getGeneratedKeys()
+            if(rs.next()){
+                int generatedMessageId = (int) rs.getLong(1);
+                System.out.println(generatedMessageId);
                 return new Message(generatedMessageId, message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
             }
         }catch(SQLException e){
