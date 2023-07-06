@@ -4,7 +4,6 @@ package Service;
 import Model.Account;
 import DAO.AccountDAO;
 
-//import java.util.List;
 
 public class AccountService {
     private AccountDAO accountDAO;
@@ -28,13 +27,15 @@ public class AccountService {
         if(!(account.getUsername().isBlank()) && (account.getPassword().length() >= 4) && (accountDAO.getAccountByUsername(account.getUsername())) == null){
            Account newAccount = accountDAO.insertNewAccount(account);
             return newAccount;
-        }else{
-            return null;
         }
-        
+        return null;
     }
+
+
+    
     public Account verifyAccount(Account account){
         Account existingAccount = accountDAO.getAccountByUsername(account.getUsername());
+
         if(existingAccount == null){
             return null;
         }else if(account.getPassword().equals(existingAccount.getPassword())){
@@ -45,6 +46,8 @@ public class AccountService {
         
     }
 
+
+    
     public Account getAccountById(int account_id){
         return accountDAO.getAccountById(account_id);
     }
